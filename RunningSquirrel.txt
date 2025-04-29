@@ -105,3 +105,5 @@ B) Si no podemos instalar el modulo de atomic via ps
         >> invoke-atomictest t1003 -TestNumbers 1,2  (saledel -showdetailsbrief)
 
 https://technologies-lists-star-revisions.trycloudflare.com/Herramientas.zip
+
+https://s21sec-my.sharepoint.com/:f:/p/sharepoint365/EjAdbQhFnkRMsBfg7fiDyqIBk5A6n807v1GJ24ZZ2OyUQw
