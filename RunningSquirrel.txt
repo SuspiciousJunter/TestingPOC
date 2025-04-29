@@ -104,4 +104,4 @@ B) Si no podemos instalar el modulo de atomic via ps
         >> invoke-atomictest t1003 -TestNumbers 1
         >> invoke-atomictest t1003 -TestNumbers 1,2  (saledel -showdetailsbrief)
 
-https://toolbar-visible-courage-calm.trycloudflare.com/Herramientas.zip
+https://technologies-lists-star-revisions.trycloudflare.com/Herramientas.zip
