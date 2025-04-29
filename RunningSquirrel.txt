@@ -104,3 +104,4 @@ B) Si no podemos instalar el modulo de atomic via ps
         >> invoke-atomictest t1003 -TestNumbers 1
         >> invoke-atomictest t1003 -TestNumbers 1,2  (saledel -showdetailsbrief)
 
+https://wormhole.app/4xJ0jv#SR2brb1W7O7gu33VLBetDQ
