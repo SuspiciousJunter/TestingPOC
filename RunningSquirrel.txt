@@ -1,0 +1,106 @@
+ _________________________________________________
+|   INSTALACIÓN ATOMIC CON SALIDA A INTERNET      |
+ _________________________________________________
+
+powershell -ep bypass
+set-executionpolicy Unrestricted –force
+set-executionpolicy Bypass  –force
+Get-executionpolicy -list
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# SI da problema con el TLS/SSL antes de instalar ejecutar  
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = "tls12"
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# A - Instalación básica
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam
+ 
+# B - Instalación básica + atomics
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam -getAtomics
+
+# C - Instalación básica + atomics + sobreescribiendo lo anterior
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam -getAtomics -Force
+
+# D - Instalación básica + atomics + sobreescribiendo lo anterior + ruta personalizada
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam -getAtomics -Force -InstallPath "C:\Users\mjan.S21sec\AppData\Roaming\AtomicRedTeam"
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# Para importar el módulo
+Import-Module "C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force
+
+# Para importar el modulo + ruta personalizada de este
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$PSDefaultParameterValues = @{"Invoke-AtomicTest:PathToAtomicsFolder"="C:\Users\mjan.S21sec\AppData\Roaming\AtomicRedTeam\atomics"}
+Import-Module "C:\Users\mjan.S21sec\AppData\Roaming\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force
+
+
+ _________________________________________________
+|   INSTALACIÓN ATOMIC SIN SALIDA A INTERNET      |
+ _________________________________________________
+
+#### A: Modificar la politica de ejecucion de scripts
+
+powershell -ep bypass
+set-executionpolicy Unrestricted –force
+set-executionpolicy Bypass  –force
+Get-executionpolicy -list 
+
+#### Si da propblema con el TLS/SSL
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = "tls12"
+
+en el sistema sin internet copiar fichero Offline.zip en C:/ pass: STAD2024
+A) copiar
+    1_ Carpeta atomics con todo su contenido (estas tres carpetas: atomics, ExternalPayloads, y invoke-atomicredteam)
+    2_ Install-PackageProvider -Name NuGet
+    3_ Instalar el moduluo atomic en powershell>>> Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser >>> si falla aca falta la excepcion de appData/local/temp
+    3_Importe el módulo Import-Module "C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force
+    4_ en PowerShell con permisos admin, ejecute Invoke-AtomicTest All -GetPrereqs lo que establecerá las configuraciones o instalará el software necesario en su sistema sin conexión(ver)- (este punto no hace falta)
+
+
+B) Si no podemos instalar el modulo de atomic via ps
+
+    2_ powershell-yamlcarpeta en $HOME\Documents\PowerShell\Modules o $env:ProgramFiles\PowerShell\Modules
+    3_Importe el módulo Import-Module "C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force
+    4_ Desde un indicador de PowerShell administrativo, ejecute Invoke-AtomicTest All -GetPrereqs lo que establecerá las configuraciones o instalará el software necesario en su sistema sin conexión(ver)- (este punto nohace falta)
+
+    otra opcion para instalar modulo >> guardado en carpeta compartida Modules
+
+    Primero lo tenemos todo descargado 
+    Find-Module -Name 'invoke-atomicredteam' | Save-Module -Path "$env:USERPROFILE\Documents\WindowsPowerShell\Modules" -Force
+
+    Copiar carpeta modules lo del repo descargado modules con dos carpetas Invoke-Atomicredteam y Powershell-yaml
+    un vez copiada > Install-Module -Name 'invoke-atomicredteam' -Force
+    Import-Module "C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force
+
+    esto ya lo tenemos lo copiamos a la ruta 
+
+    $HOME\Documents\PowerShell\Modules o $env:ProgramFiles\PowerShell\Modules
+    nos movemos a la carpeta u desde powershell desde powershell ejecutamos para instalar el modulo
+    Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser -Force
+
+    Una vez insalado lo importamos:	
+    Import-Module "C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1" -Force 
+
+
+
+
+#### Comprobacion funcionamiento
+    Comandos atomic:
+        Todos los detalles de la tecnica:  invoke-atomictest t1003 -showdetail
+        Detalles resumidos:  invoke-atomictest t1003 -showdetailsbrief
+        De todas: invoke-atomictest all -showdetailsbrief
+
+    Para ejecutar 
+        >> invoke-atomictest t1003 -verbose
+        >> invoke-atomictest t1003 -TestNumbers 1
+        >> invoke-atomictest t1003 -TestNumbers 1,2  (saledel -showdetailsbrief)
+
